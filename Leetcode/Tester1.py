@@ -239,4 +239,55 @@ def detectCapitalUse(word):
     return True
 
 
-print(detectCapitalUse("F"))
+def reverseStr(s, k):
+    """
+    :type s: str
+    :type k: int
+    :rtype: str
+    """
+    list1 = list(s)
+    end = k
+    start = 0
+    l = len(list1)
+    while end <= l:
+        list1[start:end] = list1[start:end][::-1]
+        start += 2*k
+        end = start+k
+    if start < l < end:
+        list1[start:l] = list1[start:l][::-1]
+    return ''.join(list1)
+
+
+def checkRecord(s):
+    """
+    :type s: str
+    :rtype: bool
+    """
+    return s.count('A') < 2 and s.find('LLL') == -1
+
+
+def reverseWords(s):
+    """
+    https://leetcode.com/problems/reverse-words-in-a-string-iii/
+    :type s: str
+    :rtype: str
+    """
+    list1 = s.split(' ')
+    for i in range(len(list1)):
+        list1[i] = list1[i][::-1]
+    return ' '.join(list1)
+
+
+def arrayPairSum(nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    nums.sort()
+    sum = 0
+    for i in range(0,len(nums),2):
+        sum += nums[i]
+    return sum
+
+
+print(arrayPairSum([1,4,3,2]))
