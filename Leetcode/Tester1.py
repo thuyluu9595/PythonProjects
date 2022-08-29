@@ -42,6 +42,8 @@ def longestPalindrome(s):
                 length += num-1
 
     return length+1 if f else length
+
+
 def addStrings(num1, num2):
     """
     :type num1: str
@@ -65,6 +67,8 @@ def addStrings(num1, num2):
     else:
         pass
     return str(sum)
+
+
 def countSegments(s):
     """
     :type s: str
@@ -84,6 +88,7 @@ def countSegments(s):
         n += 1
     return n
 
+
 def arrangeCoins(n):
     """
     :type n: int
@@ -94,6 +99,7 @@ def arrangeCoins(n):
         n -= l
         l += 1
     return l - 1
+
 
 def findDisappearedNumbers(nums):
     """
@@ -107,6 +113,7 @@ def findDisappearedNumbers(nums):
             mylist.append(i+1)
 
     return mylist
+
 
 def findContentChildren(g, s):
     """
@@ -128,6 +135,7 @@ def findContentChildren(g, s):
             i -= 1
     return count
 
+
 def constructRectangle(area):
     """
     :type area: int
@@ -138,6 +146,7 @@ def constructRectangle(area):
         if area%mid == 0:
             return [int(area/mid),mid]
         mid -= 1
+
 
 def findPoisonedDuration(timeSeries, duration):
     """
@@ -160,6 +169,7 @@ def findPoisonedDuration(timeSeries, duration):
             total += end-t0+1
     return total
 
+
 def nextGreaterElement(nums1, nums2):
     """
     :type nums1: List[int]
@@ -181,6 +191,7 @@ def nextGreaterElement(nums1, nums2):
         if j == l2-1 and nums2[l2-1] <= x:
             arr.append(-1)
     return arr
+
 
 def findWords(words):
     """
@@ -250,6 +261,78 @@ def findRelativeRanks(score):
         s.remove(ace)
     return score
 
+
+def detectCapitalUse(word):
+    """
+    :type word: str
+    :rtype: bool
+    """
+    if len(word) == 1:
+        return True
+    fl1 = word[0].isupper()
+    fl2 = word[1].isupper()
+    for c in word[1:]:
+        if fl1:
+            if c.isupper() != fl2:
+                return False
+        else:
+            if c.isupper():
+                return False
+    return True
+
+
+def reverseStr(s, k):
+    """
+    :type s: str
+    :type k: int
+    :rtype: str
+    """
+    list1 = list(s)
+    end = k
+    start = 0
+    l = len(list1)
+    while end <= l:
+        list1[start:end] = list1[start:end][::-1]
+        start += 2*k
+        end = start+k
+    if start < l < end:
+        list1[start:l] = list1[start:l][::-1]
+    return ''.join(list1)
+
+
+def checkRecord(s):
+    """
+    :type s: str
+    :rtype: bool
+    """
+    return s.count('A') < 2 and s.find('LLL') == -1
+
+
+def reverseWords(s):
+    """
+    https://leetcode.com/problems/reverse-words-in-a-string-iii/
+    :type s: str
+    :rtype: str
+    """
+    list1 = s.split(' ')
+    for i in range(len(list1)):
+        list1[i] = list1[i][::-1]
+    return ' '.join(list1)
+
+
+def arrayPairSum(nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    nums.sort()
+    sum = 0
+    for i in range(0,len(nums),2):
+        sum += nums[i]
+    return sum
+
+
+print(arrayPairSum([1,4,3,2]))
 
 def checkPerfectNumber(num):
     """
