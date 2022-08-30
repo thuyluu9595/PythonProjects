@@ -10,13 +10,13 @@ def toHex(num):
     if num == 0:
         return '0'
     if num < 0:
-        num += 2**32
+        num += 2 ** 32
     res = []
     while num:
-        d = num%16
-        res.append(str(d) if d < 9 else s[d-10])
+        d = num % 16
+        res.append(str(d) if d < 9 else s[d - 10])
         num //= 16
-    return ''.join(res[::-1]) #if num else '0'
+    return ''.join(res[::-1])  # if num else '0'
 
 
 def longestPalindrome(s):
@@ -34,14 +34,14 @@ def longestPalindrome(s):
     length = 0
     f = False
     for num in dict.values():
-        if num%2 == 0:
+        if num % 2 == 0:
             length += num
         else:
-            f =True
+            f = True
             if num > 1:
-                length += num-1
+                length += num - 1
 
-    return length+1 if f else length
+    return length + 1 if f else length
 
 
 def addStrings(num1, num2):
@@ -52,18 +52,18 @@ def addStrings(num1, num2):
     """
     n = len(num1)
     m = len(num2)
-    l=0
+    l = 0
     sum = 0
-    while(n > 0 and m > 0):
-        sum += (int(num1[n-1]) + int(num2[m-1]))*10**l
+    while (n > 0 and m > 0):
+        sum += (int(num1[n - 1]) + int(num2[m - 1])) * 10 ** l
         l += 1
         n -= 1
         m -= 1
 
     if n == 0 and m != 0:
-        sum += int(num2[:m])*10**l
+        sum += int(num2[:m]) * 10 ** l
     elif m == 0 and n != 0:
-        sum += int(num1[:n])*10**l
+        sum += int(num1[:n]) * 10 ** l
     else:
         pass
     return str(sum)
@@ -109,8 +109,8 @@ def findDisappearedNumbers(nums):
     myset = set(nums)
     mylist = []
     for i in range(len(nums)):
-        if (i+1) not in myset:
-            mylist.append(i+1)
+        if (i + 1) not in myset:
+            mylist.append(i + 1)
 
     return mylist
 
@@ -123,10 +123,10 @@ def findContentChildren(g, s):
     """
     g.sort()
     s.sort()
-    i = len(g)-1
-    j = len(s)-1
+    i = len(g) - 1
+    j = len(s) - 1
     count = 0
-    while i>=0 and j>=0:
+    while i >= 0 and j >= 0:
         if s[j] >= g[i]:
             count += 1
             i -= 1
@@ -143,8 +143,8 @@ def constructRectangle(area):
     """
     mid = int(math.sqrt(area))
     while mid > 0:
-        if area%mid == 0:
-            return [int(area/mid),mid]
+        if area % mid == 0:
+            return [int(area / mid), mid]
         mid -= 1
 
 
@@ -158,15 +158,15 @@ def findPoisonedDuration(timeSeries, duration):
     l = len(timeSeries)
     for i in range(l):
         t0 = timeSeries[i]
-        end = t0 + duration -1
-        if i < l-1:
-            t1 = timeSeries[i+1]
+        end = t0 + duration - 1
+        if i < l - 1:
+            t1 = timeSeries[i + 1]
             if end >= t1:
-                total += t1-t0
+                total += t1 - t0
             else:
-                total += end-t0+1
+                total += end - t0 + 1
         else:
-            total += end-t0+1
+            total += end - t0 + 1
     return total
 
 
@@ -184,11 +184,11 @@ def nextGreaterElement(nums1, nums2):
     for x in nums1:
         start = dict[x]
         l2 = len(nums2)
-        for j in range(start,l2):
+        for j in range(start, l2):
             if nums2[j] > x:
                 arr.append(nums2[j])
                 break
-        if j == l2-1 and nums2[l2-1] <= x:
+        if j == l2 - 1 and nums2[l2 - 1] <= x:
             arr.append(-1)
     return arr
 
@@ -251,8 +251,8 @@ def reverseStr(s, k):
     l = len(list1)
     while end <= l:
         list1[start:end] = list1[start:end][::-1]
-        start += 2*k
-        end = start+k
+        start += 2 * k
+        end = start + k
     if start < l < end:
         list1[start:l] = list1[start:l][::-1]
     return ''.join(list1)
@@ -285,9 +285,88 @@ def arrayPairSum(nums):
     """
     nums.sort()
     sum = 0
-    for i in range(0,len(nums),2):
+    for i in range(0, len(nums), 2):
         sum += nums[i]
     return sum
 
 
-print(arrayPairSum([1,4,3,2]))
+def findLHS(nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    mydict = {}
+    maxl = 0
+    set1 = set(nums)
+    for num in nums:
+        if num not in mydict:
+            mydict[num] = 1
+        else:
+            mydict[num] += 1
+    for number in set1:
+        if number - 1 in set1:
+            temp = mydict[number] + mydict[number - 1]
+            maxl = temp if temp > maxl else maxl
+
+    return maxl
+
+
+def findRestaurant(list1, list2):
+    """
+    :type list1: List[str]
+    :type list2: List[str]
+    :rtype: List[str]
+    """
+    mylist = []
+    mydict = {}
+    temp = len(list1) + len(list2)
+    for i in range(len(list1)):
+        mydict[list1[i]] = i
+    for j in range(len(list2)):
+        common_string = list2[j]
+        if common_string in mydict:
+            sum_indexes = j + mydict[common_string]
+            if sum_indexes == temp:
+                mylist.append(common_string)
+            elif sum_indexes < temp:
+                mylist.clear()
+                mylist.append(common_string)
+                temp = sum_indexes
+            else:
+                pass
+    return mylist
+
+
+def canPlaceFlowers(flowerbed, n):
+    """
+    :type flowerbed: List[int]
+    :type n: int
+    :rtype: bool
+    """
+    tmp = -1
+    sum = 0
+    l = len(flowerbed)
+    i = 0
+    while i < l+1:
+        if i == l or flowerbed[i]:
+            j = i - tmp - 1
+            if tmp < 0 or i == l:
+                if j == 2:
+                    sum += 1
+                elif j == 0:
+                    pass
+                else:
+                    if j % 2 == 0:
+                        sum += (j) // 2
+                    else:
+                        sum += (j - 1) // 2
+            elif j % 2 == 0:
+                sum += (j - 2) // 2
+            else:
+                sum += (j - 1) // 2
+            tmp = i
+        i += 1
+    return sum == n
+
+
+print(canPlaceFlowers([0,0,0,0,1,0,0,0,1,0,0,0,0],4))
