@@ -10,7 +10,7 @@ def toHex(num):
     if num == 0:
         return '0'
     if num < 0:
-        num += 2 ** 32
+        num += 2**32
     res = []
     while num:
         d = num % 16
@@ -219,6 +219,48 @@ def findWords(words):
             arr.append(word)
     return arr
 
+def convertToBase7(num):
+    """
+    :type num: int
+    :rtype: str
+    """
+    fl = False
+    if num < 0:
+        num *= -1
+        fl = True
+    if num == 0:
+        return '0'
+    arr = []
+    while num > 0:
+        n = num%7
+        arr.append(str(n))
+        num = (num-n)//7
+    if fl:
+        arr.append('-')
+    return ''.join(arr[::-1])
+
+def findRelativeRanks(score):
+    """
+    :type score: List[int]
+    :rtype: List[str]
+    """
+
+    s = set(score)
+    for i in range(len(score)):
+        ace = max(s)
+        index = score.index(ace)
+        if i < 3:
+            if i == 0:
+                score[index] = "Gold Medal"
+            if i == 1:
+                score[index] = "Silver Medal"
+            if i == 2:
+                score[index] = "Bronze Medal"
+        else:
+            score[index] = str(i+1)
+        s.remove(ace)
+    return score
+
 
 def detectCapitalUse(word):
     """
@@ -370,3 +412,26 @@ def canPlaceFlowers(flowerbed, n):
 
 
 print(canPlaceFlowers([0,0,0,0,1,0,0,0,1,0,0,0,0],4))
+
+def checkPerfectNumber(num):
+    """
+    :type num: int
+    :rtype: bool
+    """
+    if num == 1:
+        return True
+    sum = 1
+    i = 2
+    j = int(num/2)
+    while i < j:
+        if num%i == 0:
+            j = int(num/i)
+            if i != j:
+                sum += i+j
+            else:
+                sum += i
+            print(i, j,sum)
+        i+=1
+    return True if sum == num else False
+
+print(checkPerfectNumber(999991))
