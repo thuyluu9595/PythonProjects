@@ -411,8 +411,6 @@ def canPlaceFlowers(flowerbed, n):
     return sum == n
 
 
-print(canPlaceFlowers([0,0,0,0,1,0,0,0,1,0,0,0,0],4))
-
 def checkPerfectNumber(num):
     """
     :type num: int
@@ -434,4 +432,49 @@ def checkPerfectNumber(num):
         i+=1
     return True if sum == num else False
 
-print(checkPerfectNumber(999991))
+
+def busyStudent(startTime, endTime, queryTime):
+    """
+    :type startTime: List[int]
+    :type endTime: List[int]
+    :type queryTime: int
+    :rtype: int
+    """
+    count = 0
+    for x, y in zip(startTime,endTime):
+        if x <= queryTime <= y:
+            count += 1
+    return count
+
+
+def getConcatenation(nums):
+    """
+    :type nums: List[int]
+    :rtype: List[int]
+    """
+    nums.extend(nums)
+    return nums
+
+
+def numsSameConsecDiff(n, k):
+    """
+    :type n: int
+    :type k: int
+    :rtype: List[int]
+    """
+    arr = []
+    for i in range(pow(10,n-1),pow(10,n)):
+        fl = True
+        m = i
+        for j in range(n-1):
+            p = m%10
+            m = m // 10
+            if abs(p - m%10) != k:
+                fl = False
+                break
+        if fl:
+            arr.append(i)
+    return arr
+
+
+print(numsSameConsecDiff(4,5))
