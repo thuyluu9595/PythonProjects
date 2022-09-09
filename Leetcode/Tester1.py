@@ -1,3 +1,4 @@
+import collections
 import math
 
 
@@ -477,4 +478,127 @@ def numsSameConsecDiff(n, k):
     return arr
 
 
-print(numsSameConsecDiff(4,5))
+def runningSum(nums):
+    """
+    :type nums: List[int]
+    :rtype: List[int]
+    """
+    for i in range(1, len(nums)):
+        nums[i] = nums[i] + nums[i-1]
+    return nums
+
+
+def maxIncreaseKeepingSkyline(grid):
+    """
+    :type grid: List[List[int]]
+    :rtype: int
+    """
+    max_row = []
+    max_col = []
+    for i in range(len(grid)):
+        max_row.append(max(grid[i]))
+        m = 0
+        for j in range(len(grid)):
+            m = grid[j][i] if grid[j][i] > m else m
+        max_col.append(m)
+    sum = 0
+    for p in range(len(grid)):
+        for q in range(len(grid)):
+            sum += min(max_row[p], max_col[q]) - grid[p][q]
+    return sum
+
+
+def garbageCollection(garbage, travel):
+    """
+    :type garbage: List[str]
+    :type travel: List[int]
+    :rtype: int
+    """
+    mpg = ['M', 'P', 'G']
+    time = [0]*3
+    ptr = [0]*3
+    i: int
+    for i in range(len(garbage)):
+        unit: int
+        for unit in range(len(mpg)):
+            avl = garbage[i].count(mpg[unit])
+            time[unit] += avl
+            if avl != 0:
+                ptr[unit] = i
+    for u in range(len(mpg)):
+        for j in range(0, ptr[u]):
+            time[u] += travel[j]
+    return sum(time)
+
+
+def restoreString(s, indices):
+    """
+    :type s: str
+    :type indices: List[int]
+    :rtype: str
+    """
+    s1 = [None]*len(s)
+    for idx, c in zip(indices,s):
+        s1[idx] = c
+    return ''.join(s1)
+
+
+def countMatches(items, ruleKey, ruleValue):
+    """
+    :type items: List[List[str]]
+    :type ruleKey: str
+    :type ruleValue: str
+    :rtype: int
+    """
+    if ruleKey == "type":
+        kw = 0
+    elif ruleKey == "color":
+        kw = 1
+    else:
+        kw = 2
+    count = 0
+    for item in items:
+        if item[kw] == ruleValue:
+            count += 1
+    return count
+
+
+def groupThePeople(groupSizes):
+    """
+    :type groupSizes: List[int]
+    :rtype: List[List[int]]
+    """
+    dict = {}
+    ans = []
+    for i in range(len(groupSizes)):
+        g = groupSizes[i]
+        if g in dict:
+            dict[g].append(i)
+        else:
+            dict[g] = [i]
+
+    for num in dict:
+        begin = 0
+        end = num
+        while end <= len(dict[num]):
+            ans.append(dict[num][begin:end])
+            begin = end
+            end += num
+    return ans
+
+
+def minOperations(boxes):
+    """
+    :type boxes: str
+    :rtype: List[int]
+    """
+    dict = collections.defaultdict(list)
+    for i, j in enumerate(boxes):
+        dict[int(j)].append(i)
+    res = []
+    for k in range(len(boxes)):
+        res.append(sum([abs(num-k) for num in dict[1]]))
+    return res
+
+
+print(minOperations("001011"))
