@@ -601,4 +601,120 @@ def minOperations(boxes):
     return res
 
 
-print(minOperations("001011"))
+def countGoodSubstrings(s):
+    """
+    :type s: str
+    :rtype: int
+    """
+    l = len(s)
+    if l < 3:
+        return 0
+    count = 0
+    for p in range(l-2):
+        if len(set(s[p:p+3])) == 3:
+            count += 1
+    return count
+
+
+def numOfSubarrays(arr, k, threshold):
+    """
+    :type arr: List[int]
+    :type k: int
+    :type threshold: int
+    :rtype: int
+    """
+    if len(arr) < k:
+        return 0
+    start, end = 0, k
+    count = 0
+    sum1 = sum(arr[start:end])
+    if sum1 // k >= threshold:
+        count += 1
+    while end < len(arr):
+        sum1 += arr[end] - arr[start]
+        if sum1 // k >= threshold:
+            count += 1
+        start += 1
+        end += 1
+    return count
+
+
+def findMaxSequenceOnes(nums):
+    count = 0
+    ans = 0
+    for i in range(len(nums)):
+        if nums[i] == 1:
+            count += 1
+        else:
+            ans = max(ans, count)
+            count = 0
+    ans = max(ans, count)
+    return ans
+
+
+def findMaxConsecutiveOnes(nums):
+    """
+    Given a binary array, find the maximum number of consecutive 1s in this array if you can flip at most one 0.
+    :param nums:
+    :return:
+    """
+    # [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1]
+    count0, count1 = 0, 0
+    ans = 0
+    k = 1
+    i = 0
+    res = 0
+    while i < len(nums):
+        if nums[i] == 1:
+            if count0 == 1 and k != 0:
+                count1 += 1
+                count0 = 0
+                k -= 1
+                res = i
+            elif count0 > 0:
+                ans = max(ans, count1 + k)
+                if res:
+                    i = res
+                    res = 0
+                count1 = 0
+                count0 = 0
+                k = 1
+            count1 += 1
+        else:
+            count0 += 1
+        i += 1
+    ans = max(ans, count1+k)
+    return ans
+
+
+def longestOnes(nums, k):
+    """
+    :type nums: List[int]
+    :type k: int
+    :rtype: int
+    """
+    # [1,1,1,0,0,0,1,1,1,1,0] k=2
+    # left pointer for tracking used k
+    left = 0
+    for i in range(len(nums)):  # i pointer always move up
+        if nums[i] == 0:
+            k -= 1  # reduce k if 0
+        if k < 0:   # when run out of k, back window slices up with front window
+            if nums[left] == 0:
+                k += 1      # return value of k if back window is 0
+            left += 1
+    return i - left + 1     # return largest size of window
+
+
+def longestOnes1(A, K):
+    # [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1]
+    i = 0
+    for j in range(len(A)):
+        K -= 1 - A[j]
+        if K < 0:
+            K += 1 - A[i]
+            i += 1
+    return j - i + 1
+
+
+print(longestOnes([0,0,1,1,0,0,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1],3))
