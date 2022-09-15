@@ -717,4 +717,52 @@ def longestOnes1(A, K):
     return j - i + 1
 
 
-print(longestOnes([0,0,1,1,0,0,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1],3))
+def numberOfSubstrings(s):
+    """
+    :type s: str
+    :rtype: int
+    """
+    # 'aabaacabc'
+    # ans = 0
+    # left, right = 0, 0
+    # l = len(s)
+    # while left < l-2:
+    #     for i in range(left+2, l):
+    #         s1 = s[left:i+1]
+    #         if 'a' in s1 and 'b' in s1 and 'c' in s1:
+    #             ans += l - i
+    #             break
+    #     left += 1
+    # return ans
+    ans = 0
+    dict = {'a': 0, 'b': 0, 'c': 0}
+    j = 0
+    for i in range(len(s)):
+        c = s[i]
+        dict[c] += 1
+        while j < len(s) and dict['a'] > 0 and dict['b'] > 0 and dict['c'] > 0:
+            dict[s[j]] -= 1
+            j += 1
+        print(j)
+        ans += j
+    return ans
+
+
+def divisorSubstrings(num, k):
+    """
+    :type num: int
+    :type k: int
+    :rtype: int
+    """
+    ans = 0
+    s = str(num)
+    for i in range(k,len(s)+1):
+        n = int(s[i-k:i])
+
+        if n != 0 and num % n == 0:
+
+            ans += 1
+    return ans
+
+
+print(divisorSubstrings(430043,2))
