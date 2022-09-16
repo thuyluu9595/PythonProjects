@@ -765,4 +765,4 @@ def divisorSubstrings(num, k):
     return ans
 
 
-print(divisorSubstrings(430043,2))
+print(countGoodSubstrings('xyzzaz'))
