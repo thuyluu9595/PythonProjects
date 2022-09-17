@@ -764,5 +764,39 @@ def divisorSubstrings(num, k):
             ans += 1
     return ans
 
+def minimumRecolors(blocks, k):
+    """
+    :type blocks: str
+    :type k: int
+    :rtype: int
+    """
+    res = len(blocks)
+    count = 0
+    for i in range(res):
+        if blocks[i] == 'W':
+            count += 1
+        if i > k-2:
+            if count < res:
+                res = count
+            if blocks[i-k+1] == 'W':
+                count -= 1
+    return res
 
-print(countGoodSubstrings('xyzzaz'))
+
+def minimumDifference(nums, k):
+    """
+    :type nums: List[int]
+    :type k: int
+    :rtype: int
+    """
+    l = len(nums)
+    if k > l:
+        return 0
+    nums.sort()
+    res = nums[-1] - nums[0]
+    for i in range(k-1,l):
+        n = nums[i] - nums[i-k+1]
+        if n < res:
+            res = n
+    return res
+print(minimumDifference([93614,91956,83384,14321,29824,89095,96047,25770,39895],3))
