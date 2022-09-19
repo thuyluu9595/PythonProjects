@@ -765,4 +765,43 @@ def divisorSubstrings(num, k):
     return ans
 
 
-print(countGoodSubstrings('xyzzaz'))
+def maxSumTwoNoOverlap(nums, firstLen, secondLen):
+    """
+    :type nums: List[int]
+    :type firstLen: int
+    :type secondLen: int
+    :rtype: int
+    """
+    def findMax(nums1, k):
+        sm = 0
+        l, r = 0, 0
+        if len(nums1) < k:
+            return 0,l,r
+        for j in range(k):
+            sm += nums1[j]
+        mx = sm
+        r = j
+        for i in range(k, len(nums1)):
+            sm += nums1[i]
+            sm -= nums1[i - k]
+            if sm > mx:
+                mx = sm
+                r = i
+                l = i - k + 1
+        return mx, l, r
+
+    # Find firstlen
+    maxFirst, l, r = findMax(nums, firstLen)
+    maxSecond1, g, h = findMax(nums[0:l], secondLen)
+    maxSecond2, g, h = findMax(nums[r + 1:], secondLen)
+    print(maxFirst,maxSecond1, maxSecond2)
+    res1 = max(maxSecond1, maxSecond2) + maxFirst
+    # Find secondlen
+    maxSecond, l, r = findMax(nums, secondLen)
+    maxFirst1, g, h = findMax(nums[0:l], firstLen)
+    maxFirst2, g, h = findMax(nums[r + 1:], firstLen)
+    res2 = max(maxFirst1, maxFirst2) + maxSecond
+    print(maxSecond, maxFirst1, maxFirst2)
+    return max(res1, res2)
+
+print(maxSumTwoNoOverlap([8,20,6,2,20,17,6,3,20,8,12],5,4))
