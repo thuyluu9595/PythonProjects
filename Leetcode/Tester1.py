@@ -799,7 +799,8 @@ def minimumDifference(nums, k):
         if n < res:
             res = n
     return res
-print(minimumDifference([93614,91956,83384,14321,29824,89095,96047,25770,39895],3))
+
+
 def maxSumTwoNoOverlap(nums, firstLen, secondLen):
     """
     :type nums: List[int]
@@ -807,36 +808,79 @@ def maxSumTwoNoOverlap(nums, firstLen, secondLen):
     :type secondLen: int
     :rtype: int
     """
-    def findMax(nums1, k):
-        sm = 0
-        l, r = 0, 0
-        if len(nums1) < k:
-            return 0,l,r
-        for j in range(k):
-            sm += nums1[j]
-        mx = sm
-        r = j
-        for i in range(k, len(nums1)):
-            sm += nums1[i]
-            sm -= nums1[i - k]
-            if sm > mx:
-                mx = sm
-                r = i
-                l = i - k + 1
-        return mx, l, r
 
-    # Find firstlen
-    maxFirst, l, r = findMax(nums, firstLen)
-    maxSecond1, g, h = findMax(nums[0:l], secondLen)
-    maxSecond2, g, h = findMax(nums[r + 1:], secondLen)
-    print(maxFirst,maxSecond1, maxSecond2)
-    res1 = max(maxSecond1, maxSecond2) + maxFirst
-    # Find secondlen
-    maxSecond, l, r = findMax(nums, secondLen)
-    maxFirst1, g, h = findMax(nums[0:l], firstLen)
-    maxFirst2, g, h = findMax(nums[r + 1:], firstLen)
-    res2 = max(maxFirst1, maxFirst2) + maxSecond
-    print(maxSecond, maxFirst1, maxFirst2)
-    return max(res1, res2)
+    def findMax(arr, L, M):
+        """
+        Support function to find the max sum of 2 subarray with given lengths
+        :param arr:
+        :param L:
+        :param M:
+        :return:
+        """
+        sumL, sumM = 0, 0
+        # Find sum of subarray L and M at the beginning. |____L____|____M_____|------------------
+        for i in range(L+M):
+            if i < L:
+                sumL += arr[i]
+            else:
+                sumM += arr[i]
 
-print(maxSumTwoNoOverlap([8,20,6,2,20,17,6,3,20,8,12],5,4))
+        maxL = sumL
+        ans = sumL + sumM
+        # Continuously find the max of subarray length L and value of subarray length M. The answer is the maximum
+        # combination.
+        for j in range(L+M, len(arr)):
+            sumL += arr[j-M] - arr[j-M-L]
+            maxL = max(maxL, sumL)          # find max of sub-L
+            sumM += arr[j] - arr[j-M]       # find sub-M
+            ans = max(ans, maxL + sumM)     # answer is the max combination
+        return ans                          # -------|max sub-L|--------|______M_______|
+
+    # firstLen can happen before or after secondLen
+    return max(findMax(nums,firstLen,secondLen), findMax(nums, secondLen, firstLen))
+
+
+def numberOfSubarrays(nums, k):
+    """
+    Sliding window with elastic ends
+    :type nums: List[int]
+    :type k: int
+    :rtype: int
+    """
+    l, ans, suml = 0, 0, 0
+    for i in range(len(nums)):      # keep sliding forward
+        if nums[i] % 2 == 1:
+            k -= 1
+        if k < 1:
+            suml = 0
+        while k < 1:                # reduce left and count # of diff
+            suml += 1
+            if nums[l] % 2 == 1:
+                k += 1
+            l += 1
+        ans += suml                 # adding up # of diff from left
+    return ans
+
+
+def maxConsecutiveAnswers(answerKey, k):
+    """
+    Sliding window to find max size with allowing k changes
+    :type answerKey: str
+    :type k: int
+    :rtype: int
+    """
+    def helper(arr, k, c):
+        l = 0
+        i = 0
+        for i in range(len(arr)):
+            if arr[i] != c:
+                k -= 1
+            if k < 0:
+                if arr[l] != c:
+                    k += 1
+                l += 1
+        return i - l + 1
+    return max(helper(answerKey, k, 'T'), helper(answerKey, k, 'F'))
+
+
+print(maxConsecutiveAnswers("TTFF", 2))
