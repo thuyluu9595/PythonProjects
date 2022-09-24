@@ -2,6 +2,14 @@ import collections
 import math
 
 
+# Definition for a binary tree node.
+class TreeNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+
 def toHex(num):
     """
     :type num: int
@@ -11,7 +19,7 @@ def toHex(num):
     if num == 0:
         return '0'
     if num < 0:
-        num += 2**32
+        num += 2 ** 32
     res = []
     while num:
         d = num % 16
@@ -220,6 +228,7 @@ def findWords(words):
             arr.append(word)
     return arr
 
+
 def convertToBase7(num):
     """
     :type num: int
@@ -233,12 +242,13 @@ def convertToBase7(num):
         return '0'
     arr = []
     while num > 0:
-        n = num%7
+        n = num % 7
         arr.append(str(n))
-        num = (num-n)//7
+        num = (num - n) // 7
     if fl:
         arr.append('-')
     return ''.join(arr[::-1])
+
 
 def findRelativeRanks(score):
     """
@@ -258,7 +268,7 @@ def findRelativeRanks(score):
             if i == 2:
                 score[index] = "Bronze Medal"
         else:
-            score[index] = str(i+1)
+            score[index] = str(i + 1)
         s.remove(ace)
     return score
 
@@ -390,7 +400,7 @@ def canPlaceFlowers(flowerbed, n):
     sum = 0
     l = len(flowerbed)
     i = 0
-    while i < l+1:
+    while i < l + 1:
         if i == l or flowerbed[i]:
             j = i - tmp - 1
             if tmp < 0 or i == l:
@@ -421,16 +431,16 @@ def checkPerfectNumber(num):
         return True
     sum = 1
     i = 2
-    j = int(num/2)
+    j = int(num / 2)
     while i < j:
-        if num%i == 0:
-            j = int(num/i)
+        if num % i == 0:
+            j = int(num / i)
             if i != j:
-                sum += i+j
+                sum += i + j
             else:
                 sum += i
-            print(i, j,sum)
-        i+=1
+            print(i, j, sum)
+        i += 1
     return True if sum == num else False
 
 
@@ -442,7 +452,7 @@ def busyStudent(startTime, endTime, queryTime):
     :rtype: int
     """
     count = 0
-    for x, y in zip(startTime,endTime):
+    for x, y in zip(startTime, endTime):
         if x <= queryTime <= y:
             count += 1
     return count
@@ -464,13 +474,13 @@ def numsSameConsecDiff(n, k):
     :rtype: List[int]
     """
     arr = []
-    for i in range(pow(10,n-1),pow(10,n)):
+    for i in range(pow(10, n - 1), pow(10, n)):
         fl = True
         m = i
-        for j in range(n-1):
-            p = m%10
+        for j in range(n - 1):
+            p = m % 10
             m = m // 10
-            if abs(p - m%10) != k:
+            if abs(p - m % 10) != k:
                 fl = False
                 break
         if fl:
@@ -484,7 +494,7 @@ def runningSum(nums):
     :rtype: List[int]
     """
     for i in range(1, len(nums)):
-        nums[i] = nums[i] + nums[i-1]
+        nums[i] = nums[i] + nums[i - 1]
     return nums
 
 
@@ -515,8 +525,8 @@ def garbageCollection(garbage, travel):
     :rtype: int
     """
     mpg = ['M', 'P', 'G']
-    time = [0]*3
-    ptr = [0]*3
+    time = [0] * 3
+    ptr = [0] * 3
     i: int
     for i in range(len(garbage)):
         unit: int
@@ -537,8 +547,8 @@ def restoreString(s, indices):
     :type indices: List[int]
     :rtype: str
     """
-    s1 = [None]*len(s)
-    for idx, c in zip(indices,s):
+    s1 = [None] * len(s)
+    for idx, c in zip(indices, s):
         s1[idx] = c
     return ''.join(s1)
 
@@ -597,7 +607,7 @@ def minOperations(boxes):
         dict[int(j)].append(i)
     res = []
     for k in range(len(boxes)):
-        res.append(sum([abs(num-k) for num in dict[1]]))
+        res.append(sum([abs(num - k) for num in dict[1]]))
     return res
 
 
@@ -610,8 +620,8 @@ def countGoodSubstrings(s):
     if l < 3:
         return 0
     count = 0
-    for p in range(l-2):
-        if len(set(s[p:p+3])) == 3:
+    for p in range(l - 2):
+        if len(set(s[p:p + 3])) == 3:
             count += 1
     return count
 
@@ -683,7 +693,7 @@ def findMaxConsecutiveOnes(nums):
         else:
             count0 += 1
         i += 1
-    ans = max(ans, count1+k)
+    ans = max(ans, count1 + k)
     return ans
 
 
@@ -699,11 +709,11 @@ def longestOnes(nums, k):
     for i in range(len(nums)):  # i pointer always move up
         if nums[i] == 0:
             k -= 1  # reduce k if 0
-        if k < 0:   # when run out of k, back window slices up with front window
+        if k < 0:  # when run out of k, back window slices up with front window
             if nums[left] == 0:
-                k += 1      # return value of k if back window is 0
+                k += 1  # return value of k if back window is 0
             left += 1
-    return i - left + 1     # return largest size of window
+    return i - left + 1  # return largest size of window
 
 
 def longestOnes1(A, K):
@@ -756,13 +766,13 @@ def divisorSubstrings(num, k):
     """
     ans = 0
     s = str(num)
-    for i in range(k,len(s)+1):
-        n = int(s[i-k:i])
+    for i in range(k, len(s) + 1):
+        n = int(s[i - k:i])
 
         if n != 0 and num % n == 0:
-
             ans += 1
     return ans
+
 
 def minimumRecolors(blocks, k):
     """
@@ -775,10 +785,10 @@ def minimumRecolors(blocks, k):
     for i in range(res):
         if blocks[i] == 'W':
             count += 1
-        if i > k-2:
+        if i > k - 2:
             if count < res:
                 res = count
-            if blocks[i-k+1] == 'W':
+            if blocks[i - k + 1] == 'W':
                 count -= 1
     return res
 
@@ -794,8 +804,8 @@ def minimumDifference(nums, k):
         return 0
     nums.sort()
     res = nums[-1] - nums[0]
-    for i in range(k-1,l):
-        n = nums[i] - nums[i-k+1]
+    for i in range(k - 1, l):
+        n = nums[i] - nums[i - k + 1]
         if n < res:
             res = n
     return res
@@ -819,7 +829,7 @@ def maxSumTwoNoOverlap(nums, firstLen, secondLen):
         """
         sumL, sumM = 0, 0
         # Find sum of subarray L and M at the beginning. |____L____|____M_____|------------------
-        for i in range(L+M):
+        for i in range(L + M):
             if i < L:
                 sumL += arr[i]
             else:
@@ -829,15 +839,15 @@ def maxSumTwoNoOverlap(nums, firstLen, secondLen):
         ans = sumL + sumM
         # Continuously find the max of subarray length L and value of subarray length M. The answer is the maximum
         # combination.
-        for j in range(L+M, len(arr)):
-            sumL += arr[j-M] - arr[j-M-L]
-            maxL = max(maxL, sumL)          # find max of sub-L
-            sumM += arr[j] - arr[j-M]       # find sub-M
-            ans = max(ans, maxL + sumM)     # answer is the max combination
-        return ans                          # -------|max sub-L|--------|______M_______|
+        for j in range(L + M, len(arr)):
+            sumL += arr[j - M] - arr[j - M - L]
+            maxL = max(maxL, sumL)  # find max of sub-L
+            sumM += arr[j] - arr[j - M]  # find sub-M
+            ans = max(ans, maxL + sumM)  # answer is the max combination
+        return ans  # -------|max sub-L|--------|______M_______|
 
     # firstLen can happen before or after secondLen
-    return max(findMax(nums,firstLen,secondLen), findMax(nums, secondLen, firstLen))
+    return max(findMax(nums, firstLen, secondLen), findMax(nums, secondLen, firstLen))
 
 
 def numberOfSubarrays(nums, k):
@@ -848,17 +858,17 @@ def numberOfSubarrays(nums, k):
     :rtype: int
     """
     l, ans, suml = 0, 0, 0
-    for i in range(len(nums)):      # keep sliding forward
+    for i in range(len(nums)):  # keep sliding forward
         if nums[i] % 2 == 1:
             k -= 1
         if k < 1:
             suml = 0
-        while k < 1:                # reduce left and count # of diff
+        while k < 1:  # reduce left and count # of diff
             suml += 1
             if nums[l] % 2 == 1:
                 k += 1
             l += 1
-        ans += suml                 # adding up # of diff from left
+        ans += suml  # adding up # of diff from left
     return ans
 
 
@@ -869,6 +879,7 @@ def maxConsecutiveAnswers(answerKey, k):
     :type k: int
     :rtype: int
     """
+
     def helper(arr, k, c):
         l = 0
         i = 0
@@ -880,7 +891,139 @@ def maxConsecutiveAnswers(answerKey, k):
                     k += 1
                 l += 1
         return i - l + 1
+
     return max(helper(answerKey, k, 'T'), helper(answerKey, k, 'F'))
 
 
-print(maxConsecutiveAnswers("TTFF", 2))
+def maxVowels(s, k):
+    """
+    Sliding window size k, find max # of interest elements in that window
+    :type s: str
+    :type k: int
+    :rtype: int
+    """
+    set1 = {'a', 'o', 'e', 'u', 'i'}
+    l = len(s)
+    if l < k:
+        return 0
+    sum1 = 0
+    ans = 0
+    for i in range(l):
+        if s[i] in set1:
+            sum1 += 1
+        if i >= k - 1:
+            ans = max(ans, sum1)
+            if s[i - k + 1] in set1:
+                sum1 -= 1
+    return ans
+
+
+def threeSum(nums):
+    """
+    :type nums: List[int]
+    :rtype: List[List[int]]
+    """
+
+    def findTwo(nums, k):
+        dic = {}
+        arr = []
+        for i in range(k + 1, len(nums)):
+            # if i == k:
+            #     continue
+            target = -nums[k] - nums[i]
+            if target in dic:
+                arr.append(sorted([nums[k], target, nums[i]]))
+            dic[nums[i]] = i
+        return arr
+
+    a = []
+    for j in range(len(nums)):
+        arr = findTwo(nums, j)
+        if len(arr) > 0:
+            print(arr)
+            for l in arr:
+                if l not in a:
+                    a.append(l)
+    return a
+
+
+from collections import deque
+
+
+def getTargetCopy(original, cloned, target):
+    """
+    BFS to find corresponding node on the cloned tree from a given node on original tree
+    :type original: TreeNode
+    :type cloned: TreeNode
+    :type target: TreeNode
+    :rtype: TreeNode
+    """
+    q1 = deque()
+    q2 = deque()
+
+    q1.append(original)
+    q2.append(cloned)
+    while True:
+        node1 = q1.popleft()
+        node2 = q2.popleft()
+        if node1 == target:
+            return node2
+        if node1.left:
+            q1.append(node1.left)
+            q2.append(node2.left)
+        if node1.right:
+            q1.append(node1.right)
+            q2.append(node2.right)
+
+
+def mergeTrees(root1, root2):
+    """
+    :type root1: TreeNode
+    :type root2: TreeNode
+    :rtype: TreeNode
+    """
+    # if root1 is None and root2 is None:
+    #     return None
+    # if root1 is not None and root2 is not None:
+    #     root = TreeNode(root1.val + root2.val)
+    #     root.left = mergeTrees(root1.left, root2.left)
+    #     root.right = mergeTrees(root1.right, root2.right)
+    #     return root
+    # elif root1 is not None:
+    #     root = TreeNode(root1.val)
+    #     root.left = mergeTrees(root1.left, None)
+    #     root.right = mergeTrees(root1.right, None)
+    #     return root
+    # else:
+    #     root = TreeNode(root2.val)
+    #     root.left = mergeTrees(root2.left, None)
+    #     root.right = mergeTrees(root2.right, None)
+    #     return root
+    q = deque()
+    q.append(root1)
+    q.append(root2)
+    while len(q) != 0:
+        node1 = q.popleft()
+        node2 = q.popleft()
+        if node1 and node2:
+            node1.val = node1.val + node2.val
+            if not node1.left and node2.left:
+                node1.left = TreeNode(0)
+            q.append(node1.left)
+            q.append(node2.left)
+            if not node1.right and node2.right:
+                node1.right = TreeNode(0)
+            q.append(node1.right)
+            q.append(node2.right)
+        elif node1:
+            q.append(node1.left)
+            q.append(None)
+            q.append(node1.right)
+            q.append(None)
+
+    return root1
+
+
+
+
+print(threeSum([-1, 0, 1, 2, -1, -4]))
