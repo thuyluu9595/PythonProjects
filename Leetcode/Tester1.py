@@ -818,6 +818,45 @@ def maxSumTwoNoOverlap(nums, firstLen, secondLen):
     :type secondLen: int
     :rtype: int
     """
+    def findMax(nums,k):
+        sm = 0
+        l, r = 0, 0
+        if len(nums) < k:
+            return 0, l, r
+        for j in range(k):
+            sm += nums[j]
+        mx = sm
+        r = j
+        for i in range(k,len(nums)):
+            sm += nums[i]
+            sm -= nums[i-k]
+            if sm > mx:
+                mx = sm
+                r = i
+                l = i-k+1
+        return mx, l, r
+    # Find firstlen
+    maxFirst, l, r = findMax(nums, firstLen)
+    maxSecond1,g,h = findMax(nums[0:l], secondLen)
+    maxSecond2,g,h = findMax(nums[r+1:], secondLen)
+    print(maxFirst, maxSecond1, maxSecond2, l, r)
+    res1 = max(maxSecond1, maxSecond2) + maxFirst
+    #Find secondlen
+    maxSecond, l, r = findMax(nums, secondLen)
+    maxFirst1,g,h = findMax(nums[0:l], firstLen)
+    maxFirst2,g,h = findMax(nums[r+1:], firstLen)
+    print(maxSecond, maxFirst1, maxFirst2, l, r)
+    res2 = max(maxFirst1, maxFirst2) + maxSecond
+    return max(res1,res2)
+
+
+def maxSumTwoNoOverlap(nums, firstLen, secondLen):
+    """
+    :type nums: List[int]
+    :type firstLen: int
+    :type secondLen: int
+    :rtype: int
+    """
 
     def findMax(arr, L, M):
         """
@@ -894,6 +933,64 @@ def maxConsecutiveAnswers(answerKey, k):
 
     return max(helper(answerKey, k, 'T'), helper(answerKey, k, 'F'))
 
+def maxDepth(root):
+    if not root:
+        return 0
+    q = collections.deque()
+    q.append((root, 1))
+    while len(q) > 0:
+        node, ans = q.popleft()
+        if node.left:
+            q.append((node.left, ans+1))
+        if node.right:
+            q.append((node.right, ans+1))
+    return ans
+
+
+def findTarget(root, k):
+    """
+    :type root: TreeNode
+    :type k: int
+    :rtype: bool
+    """
+    if not root.left and not root.right:
+        return False
+    dic = {}
+    queue = []
+    queue.append(root)
+    while len(queue) > 0:
+        node = queue.pop(0)
+        target = k - node.val
+        if target in dic:
+            return True
+        dic[node.val] = 0
+        if node.left:
+            queue.append(node.left)
+        if node.right:
+            queue.append(node.right)
+    return False
+
+def deepestLeavesSum(root):
+    """
+    :type root: TreeNode
+    :rtype: int
+    """
+    if not root.left and not root.right:
+        return root.val
+    q = []
+    sm = 0
+    q.append(root)
+    while len(q) > 0:
+        temp = []
+        while len(q) > 0:
+            node = q.pop()
+            sm += node.val
+            if node.left:
+                temp.append(node.left)
+            if node.right:
+                temp.append(node.right)
+        q = temp
+    return sm
 
 def maxVowels(s, k):
     """
