@@ -1044,9 +1044,6 @@ def threeSum(nums):
     return a
 
 
-from collections import deque
-
-
 def getTargetCopy(original, cloned, target):
     """
     BFS to find corresponding node on the cloned tree from a given node on original tree
@@ -1055,8 +1052,8 @@ def getTargetCopy(original, cloned, target):
     :type target: TreeNode
     :rtype: TreeNode
     """
-    q1 = deque()
-    q2 = deque()
+    q1 = collections.deque()
+    q2 = collections.deque()
 
     q1.append(original)
     q2.append(cloned)
@@ -1079,24 +1076,7 @@ def mergeTrees(root1, root2):
     :type root2: TreeNode
     :rtype: TreeNode
     """
-    # if root1 is None and root2 is None:
-    #     return None
-    # if root1 is not None and root2 is not None:
-    #     root = TreeNode(root1.val + root2.val)
-    #     root.left = mergeTrees(root1.left, root2.left)
-    #     root.right = mergeTrees(root1.right, root2.right)
-    #     return root
-    # elif root1 is not None:
-    #     root = TreeNode(root1.val)
-    #     root.left = mergeTrees(root1.left, None)
-    #     root.right = mergeTrees(root1.right, None)
-    #     return root
-    # else:
-    #     root = TreeNode(root2.val)
-    #     root.left = mergeTrees(root2.left, None)
-    #     root.right = mergeTrees(root2.right, None)
-    #     return root
-    q = deque()
+    q = collections.deque()
     q.append(root1)
     q.append(root2)
     while len(q) != 0:
@@ -1119,6 +1099,31 @@ def mergeTrees(root1, root2):
             q.append(None)
 
     return root1
+
+
+def sumEvenGrandparent(root):
+    """
+    :type root: TreeNode
+    :rtype: int
+    """
+    def sumG(node):
+        res = 0
+        if node.left and node.left.left:
+            res += node.left.left.val
+        if node.left and node.left.right:
+            res += node.left.right.val
+        if node.right and node.right.left:
+            res += node.right.left.val
+        if node.right and node.right.right:
+            res += node.right.right.val
+        return res
+    if not root:
+        return 0
+    sm = 0
+    if root.val % 2 == 0:
+        sm = sumG(root)
+    return sm + sumEvenGrandparent(root.left) + sumEvenGrandparent(root.right)
+
 
 
 
