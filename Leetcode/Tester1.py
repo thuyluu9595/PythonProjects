@@ -1125,7 +1125,54 @@ def sumEvenGrandparent(root):
     return sm + sumEvenGrandparent(root.left) + sumEvenGrandparent(root.right)
 
 
+def reverseOddLevels(root):
+    """
+    :type root: Optional[TreeNode]
+    :rtype: Optional[TreeNode]
+    """
+    q = [root]
+    lv = 0
+    while len(q) > 0:
+        if lv % 2 == 1:
+            for i in range(2**lv // 2):
+                q[i].val, q[2**lv-i-1].val = q[2**lv-i-1].val, q[i].val
+        for j in range(len(q)):
+            node = q.pop(0)
+            q.append(node.left)
+            q.append(node.right)
+        lv += 1
+    return root
 
 
+def maximumUniqueSubarray(nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    s_arr = [] + nums
+    for i in range(1, len(s_arr)):
+        s_arr[i] += s_arr[i-1]
 
-print(threeSum([-1, 0, 1, 2, -1, -4]))
+    left = 0
+    ans = nums[left]
+    set1 = set()
+    for j in range(len(nums)):
+        n = nums[j]
+        if n in set1:
+            if left == 0:
+                ans = max(ans, s_arr[j-1])
+            else:
+                ans = max(ans, s_arr[j-1] - s_arr[left-1])
+            while n in set1:
+                #print(set1,nums[left])
+                set1.remove(nums[left])
+                left += 1
+        set1.add(n)
+    if left == 0:
+        ans = max(ans, s_arr[j])
+    else:
+        ans = max(ans, s_arr[j] - s_arr[left - 1])
+    return ans
+
+
+print(maximumUniqueSubarray([5,2,1]))
