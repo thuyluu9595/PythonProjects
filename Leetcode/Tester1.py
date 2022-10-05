@@ -1175,4 +1175,74 @@ def maximumUniqueSubarray(nums):
     return ans
 
 
-print(maximumUniqueSubarray([5,2,1]))
+def characterReplacement(s, k):
+    """
+    :type s: str
+    :type k: int
+    :rtype: int
+    """
+    count = k
+    i = 0
+    j = i + 1
+    ans = k
+    while j < len(s):
+        if s[j] != s[i]:
+            count -= 1
+        if count < 0:
+            ans = max(j - i, ans)
+            c = s[i]
+            while s[i] == c:
+                i += 1
+            j = i
+            count = k
+        j += 1
+
+    ans = max(min(j - i + count, len(s)), ans)
+    return ans
+
+# 1004
+def longestOnes2(nums, k):
+    """
+    :type nums: List[int]
+    :type k: int
+    :rtype: int
+    """
+    # left = 0
+    # for i in range(len(nums)):
+    #     if nums[i] == 0:
+    #         k -= 1
+    #     if k < 0:
+    #         if nums[left] == 0:
+    #             k += 1
+    #         left += 1
+    # return i - left + 1
+    count = 0
+    left = 0
+    for i in range(len(nums)):
+        if nums[i] == 1:
+            count += 1
+        if i - left + 1 > count + k:
+            if nums[left] == 1:
+                count -= 1
+            left += 1
+    return len(nums) - left
+
+
+# 530
+def getMinimumDifference(root):
+    """
+    :type root: TreeNode
+    :rtype: int
+    """
+    arr = []
+    def inOrder(root):
+        if not root:
+            return
+        inOrder(root.left)
+        arr.append(root.val)
+        inOrder(root.right)
+    ans = 10**5
+    for i in range(1, len(arr)):
+        ans = min(arr[i] - arr[i-1], ans)
+    return ans
+print()
