@@ -1245,4 +1245,38 @@ def getMinimumDifference(root):
     for i in range(1, len(arr)):
         ans = min(arr[i] - arr[i-1], ans)
     return ans
+
+# 2196
+def createBinaryTree(descriptions):
+    """
+    :type descriptions: List[List[int]]
+    :rtype: Optional[TreeNode]
+    """
+    dic = {}
+    set1 = set()
+    for des in descriptions:
+        # Get rid of parent node
+        if des[0] not in dic:
+            node = TreeNode(des[0])
+            dic[des[0]] = node
+            set1.add(des[0])
+        else:
+            node = dic[des[0]]
+        # Get rid of child node
+        if des[1] not in dic:
+            child = TreeNode(des[1])
+            dic[des[1]] = child
+        else:
+            child = dic[des[1]]
+        # Get rid of returning root node
+        if des[1] in set1:
+            set1.remove(des[1])
+        # Deciding left child or right child
+        if des[2]:
+            node.left = child
+        else:
+            node.right = child
+    # The only item left in the set is the root
+    return dic[set1.pop()]
+
 print()
