@@ -467,27 +467,6 @@ def getConcatenation(nums):
     return nums
 
 
-def numsSameConsecDiff(n, k):
-    """
-    :type n: int
-    :type k: int
-    :rtype: List[int]
-    """
-    arr = []
-    for i in range(pow(10, n - 1), pow(10, n)):
-        fl = True
-        m = i
-        for j in range(n - 1):
-            p = m % 10
-            m = m // 10
-            if abs(p - m % 10) != k:
-                fl = False
-                break
-        if fl:
-            arr.append(i)
-    return arr
-
-
 def runningSum(nums):
     """
     :type nums: List[int]
@@ -1175,4 +1154,118 @@ def maximumUniqueSubarray(nums):
     return ans
 
 
-print(maximumUniqueSubarray([5,2,1]))
+# 967
+def numsSameConsecDiff(n, k):
+    """
+    :type n: int
+    :type k: int
+    :rtype: List[int]
+    """
+    ans = []
+    for i in range(1, 10):
+        q = [i]
+        for a in range(n-1):
+            for j in range(len(q)):
+                num = q.pop(0)
+                tmp = num % 10
+                if tmp + k < 10:
+                    q.append(num * 10 + tmp + k)
+                if tmp - k >= 0 and k != 0:
+                    q.append(num * 10 + tmp - k)
+        ans.extend(q)
+    return ans
+
+# 107
+def levelOrderBottom(root):
+    """
+    :type root: TreeNode
+    :rtype: List[List[int]]
+    """
+    if not root:
+        return []
+    q = [root]
+    ans = []
+    while len(q) > 0:
+        tmp = []
+        for _ in range(len(q)):
+            node = q.pop(0)
+            tmp.append(node.val)
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        ans.append(tmp)
+    return ans[::-1]
+
+
+# 1448
+def goodNodes(root):
+    """
+    :type root: TreeNode
+    :rtype: int
+    """
+    def count(prev, node):
+        if not node:
+            return 0
+        mx = max(prev, node.val)
+        if prev <= node.val:
+            return 1 + count(mx, node.left) + count(mx, node.right)
+        else:
+            return count(mx, node.left) + count(mx, node.right)
+    return count(-10**4, root)
+
+
+# 930
+def numSubarraysWithSum(nums, goal):
+    """
+    :type nums: List[int]
+    :type goal: int
+    :rtype: int
+    """
+    count = 0
+    ans = 0
+    left = 0
+    for i in range(len(nums)):
+        if nums[i] == 1:
+            goal -= 1
+        if goal < 1:
+            count = 0
+            while goal < 1:
+                if nums[left] == 1:
+                    goal += 1
+                left += 1
+                count += 1
+        ans += count
+    return ans
+
+
+# 1052
+def maxSatisfied(customers, grumpy, minutes):
+    """
+    :type customers: List[int]
+    :type grumpy: List[int]
+    :type minutes: int
+    :rtype: int
+    """
+    left = 0
+    notG_customers = 0
+    G_customers = 0
+    max_c = 0
+    for i in range(len(customers)):
+        minutes -= 1
+        if grumpy[i] == 0:
+            notG_customers += customers[i]
+
+        if grumpy[i] == 1:
+            G_customers += customers[i]
+
+        if minutes < 0:
+            if grumpy[left] == 1:
+                G_customers -= customers[left]
+            left += 1
+        max_c = max(max_c, G_customers)
+
+    return max_c + notG_customers
+
+
+print(maxSatisfied([1],[0],1))
