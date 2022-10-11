@@ -1269,3 +1269,108 @@ def maxSatisfied(customers, grumpy, minutes):
 
 
 print(maxSatisfied([1],[0],1))
+def characterReplacement(s, k):
+    """
+    :type s: str
+    :type k: int
+    :rtype: int
+    """
+    count = k
+    i = 0
+    j = i + 1
+    ans = k
+    while j < len(s):
+        if s[j] != s[i]:
+            count -= 1
+        if count < 0:
+            ans = max(j - i, ans)
+            c = s[i]
+            while s[i] == c:
+                i += 1
+            j = i
+            count = k
+        j += 1
+
+    ans = max(min(j - i + count, len(s)), ans)
+    return ans
+
+# 1004
+def longestOnes2(nums, k):
+    """
+    :type nums: List[int]
+    :type k: int
+    :rtype: int
+    """
+    # left = 0
+    # for i in range(len(nums)):
+    #     if nums[i] == 0:
+    #         k -= 1
+    #     if k < 0:
+    #         if nums[left] == 0:
+    #             k += 1
+    #         left += 1
+    # return i - left + 1
+    count = 0
+    left = 0
+    for i in range(len(nums)):
+        if nums[i] == 1:
+            count += 1
+        if i - left + 1 > count + k:
+            if nums[left] == 1:
+                count -= 1
+            left += 1
+    return len(nums) - left
+
+
+# 530
+def getMinimumDifference(root):
+    """
+    :type root: TreeNode
+    :rtype: int
+    """
+    arr = []
+    def inOrder(root):
+        if not root:
+            return
+        inOrder(root.left)
+        arr.append(root.val)
+        inOrder(root.right)
+    ans = 10**5
+    for i in range(1, len(arr)):
+        ans = min(arr[i] - arr[i-1], ans)
+    return ans
+
+# 2196
+def createBinaryTree(descriptions):
+    """
+    :type descriptions: List[List[int]]
+    :rtype: Optional[TreeNode]
+    """
+    dic = {}
+    set1 = set()
+    for des in descriptions:
+        # Get rid of parent node
+        if des[0] not in dic:
+            node = TreeNode(des[0])
+            dic[des[0]] = node
+            set1.add(des[0])
+        else:
+            node = dic[des[0]]
+        # Get rid of child node
+        if des[1] not in dic:
+            child = TreeNode(des[1])
+            dic[des[1]] = child
+        else:
+            child = dic[des[1]]
+        # Get rid of returning root node
+        if des[1] in set1:
+            set1.remove(des[1])
+        # Deciding left child or right child
+        if des[2]:
+            node.left = child
+        else:
+            node.right = child
+    # The only item left in the set is the root
+    return dic[set1.pop()]
+
+print()
