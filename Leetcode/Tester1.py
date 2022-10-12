@@ -1268,7 +1268,6 @@ def maxSatisfied(customers, grumpy, minutes):
     return max_c + notG_customers
 
 
-print(maxSatisfied([1],[0],1))
 def characterReplacement(s, k):
     """
     :type s: str
@@ -1373,4 +1372,71 @@ def createBinaryTree(descriptions):
     # The only item left in the set is the root
     return dic[set1.pop()]
 
-print()
+def accountsMerge(accounts):
+    """
+    :type accounts: List[List[str]]
+    :rtype: List[List[str]]
+    """
+    ans = []
+    dic = dict()
+    flag = False
+    for account in accounts:
+        name = account[0]
+        if name not in dic:
+            dic[name] = [set(account[1:])]
+        else:
+            emails = set(account[1:])
+            for email in account[1:]:
+                for email_set in dic[name]:
+                    if email in email_set:
+                        emails.update(email_set)
+                        dic[name].remove(email_set)
+            dic[name].append(emails)
+    for person in dic.keys():
+        for email_set in dic[person]:
+            info = [person]
+            temp = list(email_set)
+            temp.sort()
+            info.extend(temp)
+            ans.append(info)
+            del info
+    return ans
+
+# 111
+def minDepth(root):
+    """
+    :type root: TreeNode
+    :rtype: int
+    """
+    if root is None:
+        return 0
+    q = [root]
+    ans = 1
+    while len(q) > 0:
+        for i in range(len(q)):
+            node = q.pop(0)
+            if node.left is None and node.right is None:
+                return ans
+            if node.left is not None:
+                q.append(node.left)
+            if node.right is not None:
+                q.append(node.right)
+        ans += 1
+
+# 841
+def canVisitAllRooms(rooms):
+    """
+    :type rooms: List[List[int]]
+    :rtype: bool
+    """
+    visited = set()
+    q = []
+    q.extend(rooms[0])
+    while len(q) > 0:
+        room = q.pop(0)
+        if room in visited:
+            continue
+        visited.add(room)
+        q.extend(rooms[room])
+    return len(rooms) == len(visited)
+print(canVisitAllRooms([[1,3],[3,0,1],[2],[0]]))
