@@ -1439,4 +1439,276 @@ def canVisitAllRooms(rooms):
         visited.add(room)
         q.extend(rooms[room])
     return len(rooms) == len(visited)
-print(canVisitAllRooms([[1,3],[3,0,1],[2],[0]]))
+
+def findFarmland(land):
+    group = []
+    m, n = len(land), len(land[0])
+
+    def dfs(row, col):
+        if row < 0 or row >= m or col < 0 or col >= n or land[row][col] == 0:
+            return (0, 0)
+        print(row,col)
+        land[row][col] = 0
+
+        h_r1, h_c1 = dfs(row + 1, col)
+        h_r2, h_c2 = dfs(row, col + 1)
+
+        h_r = max(h_r1, h_r2, row)
+        h_c = max(h_c1, h_c2, col)
+
+        return (h_r, h_c)
+
+    for i in range(m):
+        for j in range(n):
+            if land[i][j] == 1:
+                x, y = dfs(i, j)
+                #print(land)
+                group.append([i, j, x, y])
+
+    return group
+
+# 938
+
+def rangeSumBST(root, low, high):
+    """
+    :type root: TreeNode
+    :type low: int
+    :type high: int
+    :rtype: int
+    """
+    if root is None:
+        return 0
+    val = root.val if low <= root.val <= high else 0
+    return rangeSumBST(root.left,low,high) + rangeSumBST(root.right,low,high) + val
+
+
+# 1971
+def validPath(n, edges, source, destination):
+    """
+    :type n: int
+    :type edges: List[List[int]]
+    :type source: int
+    :type destination: int
+    :rtype: bool
+    """
+    dic = dict()
+    for edge in edges:
+        if edge[0] not in dic:
+            dic[edge[0]] = {edge[1]}
+        else:
+            dic.get(edge[0]).add(edge[1])
+
+        if edge[1] not in dic:
+            dic[edge[1]] = {edge[0]}
+        else:
+            dic.get(edge[1]).add(edge[0])
+
+    stack = [source]
+    visited = set()
+
+    while stack:
+        num = stack.pop(-1)
+        if num in visited:
+            continue
+
+        if num == destination:
+            return True
+
+        visited.add(num)
+        stack.extend(dic.get(num, []))
+    return False
+
+
+def minPairSum(nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    m = 0
+    nums.sort()
+    for i in range(len(nums)//2):
+        m = max(m, nums[i] + nums[len(nums)-i-1])
+    return m
+
+# 1353
+def maxEvents(events):
+    """
+    :type events: List[List[int]]
+    :rtype: int
+    """
+
+    def custom_sort(arr):
+        return (arr[1], arr[0])
+
+    # sort the events by the endDate then the startDate if the endDate is equal
+    events.sort(key=custom_sort)
+    dic = set()
+    # d = events[0][0] # attending the first day for first event
+    for e in events:
+        i = e[0]
+        while i <= e[-1]:
+            if i not in dic:
+                dic.add(i)
+                break
+            i += 1
+    return len(dic)
+
+count = 0
+def jump(x, y):
+    global count
+    count += 1
+    if x == y:
+        return 1
+    if x > y:
+        return 0
+    return jump(x+1,y) + jump(x+2, y)
+
+
+def restoreArray(adjacentPairs):
+    """
+    :type adjacentPairs: List[List[int]]
+    :rtype: List[int]
+    """
+    dic = {}
+    tracker = set()
+    # loop through array, add connected elements to a dictionary
+    for pair in adjacentPairs:
+        e1 = pair[0]
+        e2 = pair[1]
+        if e1 not in dic:
+            dic[e1] = [e2]
+            tracker.add(e1)
+        else:
+            dic[e1].append(e2)
+            tracker.remove(e1)
+        if e2 not in dic:
+            dic[e2] = [e1]
+            tracker.add(e2)
+        else:
+            dic[e2].append(e1)
+            tracker.remove(e2)
+
+    # Pick an element at one end of the array, then build the array using a queue by considering its neighbors
+    ans = [tracker.pop()]
+    while len(dic) > 1:
+        e = ans[-1]
+        if len(dic[e]) > 1:
+            if dic[e][0] in dic:
+                ans.append(dic[e][0])
+            else:
+                ans.append(dic[e][1])
+        else:
+            ans.append(dic[e][0])
+        dic.pop(e)
+    return ans
+
+# 931 ( Time Limit Exceed)
+def minFallingPathSum(matrix):
+    """
+    :type matrix: List[List[int]]
+    :rtype: int
+    """
+
+    # function to recursively calculate the path sum, then return the value of min path
+    def minSum(i, j): # i,, j is the idx of the current cell
+        if i == len(matrix) - 1:
+            return matrix[i][j]
+
+        if j == 0: # left most cell
+            path1 = minSum(i+1, j+1)
+        elif j == len(matrix[0]) -1:
+            path1 = minSum(i+1,j-1)
+        else:
+            path1 = min(minSum(i+1,j+1),minSum(i+1,j-1))
+
+        path2 = minSum(i + 1, j)
+
+        return min(path2, path1) + matrix[i][j]
+
+    # The ans is the min of each element in row 0 plus the min of its below path
+    # ans = min(matrix[0])
+    ans = 100*len(matrix)
+    for y in range(len(matrix[0])):
+        ans = min(minSum(0,y), ans)
+    return ans
+
+
+# 985
+def sumEvenAfterQueries(nums, queries):
+    """
+    :type nums: List[int]
+    :type queries: List[List[int]]
+    :rtype: List[int]
+    """
+    # Loop through the nums, find sum of even numbers
+    # Loop through the queries array:
+        #
+        # subtract nums[idx] from tmp
+        # do the calculation, add back to tmp -> append to ans, print the result to nums
+    # return ans
+
+# 1409
+def processQueries(queries, m):
+    """
+    :type queries: List[int]
+    :type m: int
+    :rtype: List[int]
+    """
+    P = [idx for idx in range(1,m+1)]
+    for i in range(len(queries)):
+        index = P.index(queries[i])
+        queries[i] = index
+        tmp = P[queries[i]]
+        P.pop(index)
+        P.insert(0,tmp)
+
+    return queries
+
+# 2125
+def numberOfBeams(bank):
+    """
+    :type bank: List[str]
+    :rtype: int
+    """
+    # Time O(n*m)
+    # Space O(1)
+    ans  = 0
+    prev = 0
+
+    for row in bank:
+        count = 0
+        for bit in row:
+            if bit == '1':
+                count += 1
+        ans += prev * count
+        if count != 0:
+            prev = count
+    return ans
+
+# 654
+def constructMaximumBinaryTree(nums):
+    """
+    :type nums: List[int]
+    :rtype: TreeNode
+    """
+    # looking for max element and its index
+    if len(nums) == 0:
+        return None
+    value = max(nums)
+    idx = nums.index(value)
+    node = TreeNode(value)
+    if idx > 0:
+        node.left = constructMaximumBinaryTree(nums[:idx])
+    if idx < len(nums) - 1:
+        node.right = constructMaximumBinaryTree(nums[idx+1:])
+    return node
+
+# 2079
+# Loop through the entire plants, except the last plant:
+    # Increase step by 1
+    # Water the current plant
+    # check if have enough water for next plant
+    # if not -> refill step += 2 * (idx + 1)
+# return step + 1 for last plant
+
+# 1630
