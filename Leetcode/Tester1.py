@@ -1711,4 +1711,37 @@ def constructMaximumBinaryTree(nums):
     # if not -> refill step += 2 * (idx + 1)
 # return step + 1 for last plant
 
-# 1630
+# 1314
+def matrixBlockSum(mat, k):
+    import copy
+    ans = copy.deepcopy(mat)
+    for i in range(len(mat)):
+        for j in range(len(mat[0])):
+            r1, r2 = max(0, i - k), min(len(mat), i + k + 1)
+            c1, c2 = max(0, j - k), min(len(mat[0]), j + k + 1)
+            temp = 0
+
+            if i == 0 and j == 0:
+
+                for m in range(r1, r2):
+                    for n in range(c1, c2):
+                        temp += mat[m][n]
+                ans[i][j] = temp
+            else:
+                if j > 0:
+                    if j+k+1 <= len(mat[0]):
+                        for m in range(r1, r2):
+                            temp += mat[m][c2 - 1]
+                    if c1 > 0:
+                        for m in range(r1, r2):
+                            temp -= mat[m][c1-1]
+                    ans[i][j] = ans[i][j - 1] + temp
+                else:
+                    if i+k+1 <= len(mat):
+                        temp += sum(mat[r2-1][c1:c2])
+                    if r1 > 0:
+                        temp -= sum(mat[r1-1][c1:c2])
+                    ans[i][j] = ans[i-1][j] + temp
+    return ans
+
+print(matrixBlockSum([[1,2,3],[4,5,6],[7,8,9]], 2))
